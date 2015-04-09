@@ -7,4 +7,16 @@
   </parent>
   <artifactId>gate-control</artifactId>
   <name>Gate Control</name>
+  <dependencies>
+      <dependency>
+          <groupId>au.stav</groupId>
+          <artifactId>ftdi-driver</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>au.stav</groupId>
+          <artifactId>gpio-driver</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+  </dependencies>
 </project>
