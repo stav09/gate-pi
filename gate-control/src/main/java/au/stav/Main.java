@@ -1,19 +1,22 @@
 package au.stav;
 
+import au.stav.Alias.Input;
+import au.stav.Alias.Output;
+
 public class Main {
 
     public static void main(String ... args) throws InterruptedException {
         
         GPIO.initialise(new String[][] {
-            {"GPIO_07", "PULL_DOWN"},
-            {"GPIO_14", "PULL_DOWN"},
-            {"GPIO_05", "PULL_UP"},
-            {"GPIO_06", "PULL_UP"}
+            {Input.GATE_FULLY_CLOSED, "PULL_DOWN"},
+            {Input.GATE_OPENED, "PULL_DOWN"},
+            {Input.RC_CHANNEL_1, "PULL_UP"},
+            {Input.RC_CHANNEL_2, "PULL_UP"}
         });
         
-        GPIO.addInputListener("GPIO_05", (isHigh) -> {
+        GPIO.onChange(Input.RC_CHANNEL_1, (isHigh) -> {
             if (!isHigh) {
-                RelayModule.pulseRelay(0, true, 1500);
+                RelayModule.pulseRelay(Output.GATE_OPEN, true, 1500);
             }
         });
         

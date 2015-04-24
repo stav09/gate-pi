@@ -31,7 +31,7 @@ public class GPIO {
         }
     }
  
-    public static void addInputListener(String pinName, Consumer<Boolean> listener) {
+    public static void onChange(String pinName, Consumer<Boolean> listener) {
         Pin pin = RaspiPin.getPinByName(pinName);
         instance.addListener(pin, (event) -> {
             listener.accept(event.getState().isHigh());
