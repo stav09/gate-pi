@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://localhost:8080/gate");
+var ws = new WebSocket("ws://localhost:8080/events/");
 
 ws.onopen = function() {
     document.write("WebSocket opened <br>");

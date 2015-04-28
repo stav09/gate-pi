@@ -1,42 +1,35 @@
 package au.stav;
 
-import java.io.IOException;
-
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
-@WebSocket
-public class Socket {
-
-
-    @OnWebSocketClose
-    public void onClose(int statusCode, String reason) {
-        System.out.println("Close: " + reason);
+public class Socket extends WebSocketAdapter
+{
+    @Override
+    public void onWebSocketConnect(Session sess)
+    {
+        super.onWebSocketConnect(sess);
+        System.out.println("Socket Connected: " + sess);
     }
-
-    @OnWebSocketError
-    public void onError(Throwable t) {
-        System.out.println("Error: " + t.getMessage());
+    
+    @Override
+    public void onWebSocketText(String message)
+    {
+        super.onWebSocketText(message);
+        System.out.println("Received TEXT message: " + message);
     }
-
-    @OnWebSocketConnect
-    public void onConnect(Session session) {
-        System.out.println("Connect: " + session.getRemoteAddress().getAddress());
-        
-        try {
-            session.getRemote().sendString("Hello Webbrowser");
-        } catch (IOException e) {
-            System.out.println("IO Exception");
-        }
+    
+    @Override
+    public void onWebSocketClose(int statusCode, String reason)
+    {
+        super.onWebSocketClose(statusCode,reason);
+        System.out.println("Socket Closed: [" + statusCode + "] " + reason);
     }
-
-    @OnWebSocketMessage
-    public void onMessage(String message) {
-        System.out.println("Message: " + message);
+    
+    @Override
+    public void onWebSocketError(Throwable cause)
+    {
+        super.onWebSocketError(cause);
+        cause.printStackTrace(System.err);
     }
-
 }
