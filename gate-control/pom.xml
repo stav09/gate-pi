@@ -67,7 +67,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>au.stav.Server</mainClass>
+                            <mainClass>au.stav.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
