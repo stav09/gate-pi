@@ -3,9 +3,9 @@ package au.stav;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 public class Server {
 
@@ -15,25 +15,21 @@ public class Server {
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(8080);
         server.addConnector(connector);
-
-        // Setup the basic application "context" for this application at "/"
-        // This is also known as the handler tree (in jetty speak)
+        
+        // Static content 
+        String webDir = Server.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm(); 
+        WebAppContext webappContext = new WebAppContext(webDir, "/");
+        webappContext.setWelcomeFiles(new String[] { "index.html" });
+        
+        // Websocket servlet
         ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        contextHandler.setContextPath("/");
-        server.setHandler(contextHandler);
-        
-        ResourceHandler resource_handler = new ResourceHandler();
-        resource_handler.setDirectoriesListed(false);
-        resource_handler.setWelcomeFiles(new String[]{ "index.html" });
-        resource_handler.setResourceBase(".");
- 
-        HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { resource_handler, contextHandler });
-        server.setHandler(handlers);
-        
-        // Add a websocket to a specific path spec
+        contextHandler.setContextPath("/ws");
         ServletHolder holderEvents = new ServletHolder("ws-events", Servlet.class);
         contextHandler.addServlet(holderEvents, "/events/*");
+        
+        HandlerList handlers = new HandlerList();
+        handlers.setHandlers(new Handler[] { contextHandler, webappContext });
+        server.setHandler(handlers);
 
         try
         {

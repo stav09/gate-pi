@@ -14,7 +14,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jetty-version>9.2.7.v20150116</jetty-version>
+        <jetty-version>9.2.10.v20150310</jetty-version>
     </properties>
 
     <dependencies>
@@ -29,6 +29,11 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty-version}</version>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-api</artifactId>
@@ -71,8 +76,8 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> 
-                        <phase>package</phase> 
+                        <id>make-assembly</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>

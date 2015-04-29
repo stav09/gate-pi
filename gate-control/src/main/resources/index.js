@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://localhost:8080/events/");
+var ws = new WebSocket("ws://localhost:8080/ws/events/");
 
 ws.onopen = function() {
     document.write("WebSocket opened <br>");
