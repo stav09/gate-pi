@@ -41,4 +41,9 @@ public class GPIO {
     private void addListener(Pin pin, GpioPinListenerDigital listener) {
         inputs.get(pin).addListener(listener);
     }
+    
+    public static boolean isHigh(String pinName) {
+        Pin pin = RaspiPin.getPinByName(pinName);
+        return instance.inputs.get(pin).getState().isHigh();
+    }
 }

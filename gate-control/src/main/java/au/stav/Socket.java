@@ -18,7 +18,8 @@ public class Socket extends WebSocketAdapter
         super.onWebSocketConnect(session);
         log.debug("Socket Connected: " + session);
         
-        Events.on(Action.NOTICE, (msg) -> notifyClient(msg));
+        Events.on(Action.NOTIFY, (msg) -> notifyClient(msg));
+        Events.fire(Action.GET_STATUS, null);
     }
     
     @Override
@@ -47,7 +48,7 @@ public class Socket extends WebSocketAdapter
     public void onWebSocketError(Throwable cause)
     {
         super.onWebSocketError(cause);
-        log.ignore(cause);
+        log.warn(cause);
     }
     
     private void notifyClient(String message) {
