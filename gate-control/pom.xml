@@ -68,7 +68,11 @@
                     <archive>
                         <manifest>
                             <mainClass>au.stav.Main</mainClass>
+                            <addClasspath>true</addClasspath>
                         </manifest>
+                        <manifestEntries>
+                            <Class-Path>./lib/jna.jar</Class-Path>
+                        </manifestEntries>
                     </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>

@@ -5,10 +5,10 @@ public class Alias {
 
     public class Input {
     
-        public static final String RC_CHANNEL_1 = "GPIO_05";
-        public static final String RC_CHANNEL_2 = "GPIO_06";
-        public static final String GATE_FULLY_CLOSED = "GPIO_07";
-        public static final String GATE_OPENED = "GPIO_14";
+        public static final String RC_CHANNEL_1 = "GPIO 5";
+        public static final String RC_CHANNEL_2 = "GPIO 6";
+        public static final String GATE_FULLY_CLOSED = "GPIO 7";
+        public static final String GATE_OPENED = "GPIO 14";
         
     }
     
