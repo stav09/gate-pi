@@ -9,28 +9,68 @@ public class Controller implements Runnable {
         
         GPIO.initialise(new String[][] {
             {Input.GATE_FULLY_CLOSED, "PULL_DOWN"},
-            {Input.GATE_OPENED,       "PULL_DOWN"},
+            {Input.GATE_FULLY_OPEN,   "PULL_DOWN"},
             {Input.RC_CHANNEL_1,      "PULL_UP"},
             {Input.RC_CHANNEL_2,      "PULL_UP"}
         });
 
-        GPIO.onChange(Input.RC_CHANNEL_1, (isHigh) -> {
-            if (!isHigh) {
+        GPIO.onChange(Input.RC_CHANNEL_1, (high) -> {
+            if (!high) {
                 Events.fire(Action.GATE_OPEN, null);
             }
         });
         
-        Events.on(Action.GATE_OPEN, (msg) -> {
-            RelayModule.pulseRelay(Output.GATE_OPEN, true, 1500);
-            Events.fire(Action.NOTIFY, "GATE_OPENED"); //FIXME: Should notify from GATE_FULLY_CLOSED change
+        GPIO.onChange(Input.RC_CHANNEL_2, (high) -> {
+            Events.fire((high) ? Action.LIGHTS_OFF : Action.LIGHTS_ON, null);
+        });        
+        
+        GPIO.onChange(Input.GATE_FULLY_CLOSED, (high) -> {
+            Events.fire(Action.STATUS_UPDATE, null);
+            if (!high) {
+                RelayModule.pulseRelay(Output.LIGHTS, true, 20000);
+            }
         });
         
-        Events.on(Action.GET_STATUS, (msg) -> {
+        Events.on(Action.GATE_OPEN, (msg) -> {
+            if (GPIO.isHigh(Input.GATE_FULLY_CLOSED)) {
+                RelayModule.pulseRelay(Output.GATE_OPEN, true, 1500);
+                RelayModule.setRelay(Output.LIGHTS, true);
+            }
+        });
+        
+        Events.on(Action.GATE_CLOSE, (msg) -> {
+            if (GPIO.isHigh(Input.GATE_FULLY_OPEN)) {
+                RelayModule.pulseRelay(Output.GATE_OPEN, true, 1500);
+            }
+        });
+        
+        Events.on(Action.GATE_HOLD, (msg) -> {
+            RelayModule.setRelay(Output.GATE_HOLD, true);
+            Events.fire(Action.STATUS_UPDATE, null);
+        });
+
+        Events.on(Action.GATE_RELEASE, (msg) -> {
+            RelayModule.setRelay(Output.GATE_HOLD, false);
+            Events.fire(Action.STATUS_UPDATE, null);
+        });
+        
+        Events.on(Action.LIGHTS_ON, (msg) -> {
+            RelayModule.setRelay(Output.LIGHTS, true);
+            Events.fire(Action.STATUS_UPDATE, null);
+        });
+
+        Events.on(Action.LIGHTS_OFF, (msg) -> {
+            RelayModule.setRelay(Output.LIGHTS, false);
+            Events.fire(Action.STATUS_UPDATE, null);
+        });
+        
+        Events.on(Action.STATUS_UPDATE, (msg) -> {
             String statusMsg = String.format(
-                "STATUS:{\"gate_closed\":%b,\"gate_hold\":%b,\"lights_on\":%b}",
+                "{\"gate_closed\":%b,\"gate_opened\":%b,\"gate_hold\":%b,\"lights_on\":%b}",
                 GPIO.isHigh(Input.GATE_FULLY_CLOSED),
-                RelayModule.isOn(Output.LIGHTS),
-                RelayModule.isOn(Output.GATE_HOLD)
+                GPIO.isHigh(Input.GATE_FULLY_OPEN),
+                RelayModule.isOn(Output.GATE_HOLD),
+                RelayModule.isOn(Output.LIGHTS)
             );
             Events.fire(Action.NOTIFY, statusMsg);
         });

@@ -9,6 +9,6 @@ public enum Action {
     LIGHTS_ON,
     LIGHTS_OFF,
     NOTIFY,
-    GET_STATUS
+    STATUS_UPDATE
     
 }

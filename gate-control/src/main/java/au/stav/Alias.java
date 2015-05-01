@@ -8,7 +8,7 @@ public class Alias {
         public static final String RC_CHANNEL_1 = "GPIO 5";
         public static final String RC_CHANNEL_2 = "GPIO 6";
         public static final String GATE_FULLY_CLOSED = "GPIO 7";
-        public static final String GATE_OPENED = "GPIO 14";
+        public static final String GATE_FULLY_OPEN = "GPIO 14";        
         
     }
     

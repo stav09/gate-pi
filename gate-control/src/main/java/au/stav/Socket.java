@@ -19,7 +19,7 @@ public class Socket extends WebSocketAdapter
         log.debug("Socket Connected: " + session);
         
         Events.on(Action.NOTIFY, (msg) -> notifyClient(msg));
-        Events.fire(Action.GET_STATUS, null);
+        Events.fire(Action.STATUS_UPDATE, null);
     }
     
     @Override
