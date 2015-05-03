@@ -28,19 +28,22 @@
 button {
 	width:93%;
 	margin: 10px;
-	margin-bottom: 25px !important;
+	padding: 10px !important;
+	margin-bottom: 15px !important;
+	font-size: 18px !important;
 }
 
 .label {
 	width:93%;
-	margin: 10px;
+	margin: 10px;	
 	display: inline-block;
-	padding: 15px !important;
+	padding: 20px !important;
+	font-size: 14px;	
 }
 
 #label-space {
 	margin-top: 20px;
-	height: 250px
+	height: 270px
 }
 
 #button-space {
