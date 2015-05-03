@@ -41,9 +41,25 @@ public class Events {
             
             if (instance.handlers.containsKey(a)) {
                 instance.handlers.get(a).forEach(c -> {
-                    instance.callbackPool.execute(() -> c.accept(message));
+                    instance.callbackPool.execute(() -> {
+                    	try {
+							c.accept(message);
+						} catch (Exception e) {
+							evict(c);
+						}
+                    });
                 });
             }
         }
+    }
+    
+    public static void evict(Consumer<String> handler) {
+    	synchronized (instance) {
+    		instance.handlers.entrySet().forEach(e -> {
+    			if (e.getValue().contains(handler)) {
+    				e.getValue().remove(handler);
+    			}
+    		});
+		}
     }
 }
