@@ -9,28 +9,34 @@
     <link href="app.css" rel="stylesheet">
 </head>
 <body>    
-    <script src="jquery-2.1.3.min.js"></script>
-    <script src="bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
-    <script src="app.js"></script>
-    
-    <div id="connected" class="label label-success">Online</div>
-    <div id="not-connected" class="label label-danger">Offline !</div>   
-    <br/> 
-    <div id="gate-open" class="label label-danger">Gate OPEN</div>
-    <div id="gate-closed" class="label label-success">Gate CLOSED</div>
-    <br/>
-    <div id="gate-holding" class="label label-warning">ON HOLD</div>
-    <br/>
-    <div id="lights-on" class="label label-info">Lights On</div>
-    <div id="lights-off" class="label label-default">Lights Off</div>
-    <br/>
-    <button id="button-open" type="button" class="btn btn-primary">Open</button>
-    <button id="button-close" type="button" class="btn btn-primary">Close</button>
-    <br/>
-    <button id="button-hold" type="button" class="btn btn-primary">Hold</button>
-    <button id="button-release" type="button" class="btn btn-primary">Release Hold</button>
-    <br/>
-    <button id="button-lights-on" type="button" class="btn btn-primary">Turn OFF lights</button>
-    <button id="button-lights-off" type="button" class="btn btn-primary">Turn ON lights</button>
+	<div id="header" class="page-header">
+		<h2>Gate Control</h2>
+	</div>
+	<div id="label-space">
+	    <script src="jquery-2.1.3.min.js"></script>
+	    <script src="bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
+	    <script src="app.js"></script>
+	    
+	    <div id="connected" class="label label-success">Online</div>
+	    <div id="not-connected" class="label label-danger">Offline !</div>   
+	    
+	    
+	    <div id="gate-open" class="label label-danger">Gate OPEN</div>
+	    <div id="gate-closed" class="label label-success">Gate CLOSED</div>
+	    
+	    <div id="lights-on" class="label label-info">Lights On</div>
+	    <div id="lights-off" class="label label-default">Lights Off</div>
+	    
+	    <div id="gate-holding" class="label label-warning">ON HOLD</div>
+	 </div>
+	 <div id="button-space">
+	    
+	    <button id="button-open" type="button" class="btn btn-primary">Open</button>
+	    <button id="button-close" type="button" class="btn btn-primary">Close</button>
+	    <button id="button-hold" type="button" class="btn btn-primary">Hold</button>
+	    <button id="button-release" type="button" class="btn btn-primary">Release Hold</button>
+	    <button id="button-lights-on" type="button" class="btn btn-primary">Turn ON lights</button>
+	    <button id="button-lights-off" type="button" class="btn btn-primary">Turn OFF lights</button>
+    </div>
 </body>
 </html>

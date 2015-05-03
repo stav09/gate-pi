@@ -2,8 +2,6 @@
 var ws = new WebSocket("ws://" + window.location.host + "/ws/events/");
 
 ws.onopen = function() {
-    //document.write("WebSocket opened <br>");
-    //ws.send("Hello Server");
     update();
     $('#connected').show();    
 };
@@ -25,14 +23,16 @@ ws.onmessage = function(evt) {
     }
     
     if (status.gate_hold) {
+    	$('#button-hold').hide();
         $('#button-release').show();
+        $('#gate-holding').show();
     }
     
     if (status.lights_on) {
-        $('#light-on').show();
+        $('#lights-on').show();
         $('#button-lights-off').show();
     } else {
-        $('#light-off').show();
+        $('#lights-off').show();
         $('#button-lights-on').show();
     }
 };
@@ -43,7 +43,7 @@ ws.onclose = function() {
 };
 
 ws.onerror = function(err) {
-    //document.write("Error: " + err);
+    //console.log("Error: " + err);
     update();
     $('#not-connected').show();
 };
@@ -51,11 +51,28 @@ ws.onerror = function(err) {
 var update = function() {
     $('.label').hide();
     $('button').hide();    
-    $('button-open').click(function() {
-        ws.send("GATE_OPEN"); 
-    });
 }
 
-$(update);
+$(function() {
+    $('#button-open').click(function() {
+        ws.send("GATE_OPEN"); 
+    });
+    $('#button-close').click(function() {
+        ws.send("GATE_CLOSE"); 
+    });
+    $('#button-lights-on').click(function() {
+    	ws.send("LIGHTS_ON");
+    });
+    $('#button-lights-off').click(function() {
+    	ws.send("LIGHTS_OFF");
+    });
+    $('#button-hold').click(function() {
+    	ws.send("GATE_HOLD");
+    });
+    $('#button-release').click(function() {
+    	ws.send("GATE_RELEASE");
+    });
+    update();
+});
 
  

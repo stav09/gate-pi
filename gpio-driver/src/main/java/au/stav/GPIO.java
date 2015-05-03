@@ -19,6 +19,8 @@ public class GPIO {
     
     private HashMap<Pin, GpioPinDigitalInput> inputs = new HashMap<>();
     
+    private TimeOutList<Pin> pinTimeOuts = new TimeOutList<Pin>(1000);
+    
     private GPIO() {
     }
 
@@ -34,7 +36,10 @@ public class GPIO {
     public static void onChange(String pinName, Consumer<Boolean> listener) {
         Pin pin = RaspiPin.getPinByName(pinName);
         instance.addListener(pin, (event) -> {
-            listener.accept(event.getState().isHigh());
+        	if (!instance.pinTimeOuts.isTimedOut(pin)) {
+        		instance.pinTimeOuts.put(pin);
+        		listener.accept(event.getState().isHigh());
+        	}
         });
     }
     
