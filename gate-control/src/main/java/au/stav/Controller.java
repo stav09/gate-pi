@@ -19,8 +19,6 @@ public class Controller implements Runnable {
             {Input.RC_CHANNEL_2,      "PULL_UP"}
         });
 
-        RelayModule.setRelay(Output.GATE_HOLD, true);
-        
         GPIO.onChange(Input.RC_CHANNEL_1, (high) -> {
         	log.info("RC_CH_1:" + high);
             if (!high) {
@@ -39,7 +37,7 @@ public class Controller implements Runnable {
         GPIO.onChange(Input.GATE_FULLY_CLOSED, (high) -> {
             Events.fire(Action.STATUS_UPDATE, null);
             if (!high) {
-                RelayModule.pulseRelay(Output.LIGHTS, true, 20000);
+                RelayModule.pulseRelay(Output.LIGHTS, true, 120_000);
             }
         });
         
@@ -61,12 +59,12 @@ public class Controller implements Runnable {
         });
         
         Events.on(Action.GATE_HOLD, (msg) -> {
-            RelayModule.setRelay(Output.GATE_HOLD, false);
+            RelayModule.setRelay(Output.GATE_HOLD, true);
             Events.fire(Action.STATUS_UPDATE, null);
         });
 
         Events.on(Action.GATE_RELEASE, (msg) -> {
-            RelayModule.setRelay(Output.GATE_HOLD, true);
+            RelayModule.setRelay(Output.GATE_HOLD, false);
             Events.fire(Action.STATUS_UPDATE, null);
         });
         
@@ -85,7 +83,7 @@ public class Controller implements Runnable {
                 "{\"gate_closed\":%b,\"gate_opened\":%b,\"gate_hold\":%b,\"lights_on\":%b}",
                 GPIO.isHigh(Input.GATE_FULLY_CLOSED),
                 GPIO.isHigh(Input.GATE_FULLY_OPEN),
-                !RelayModule.isOn(Output.GATE_HOLD),
+                RelayModule.isOn(Output.GATE_HOLD),
                 RelayModule.isOn(Output.LIGHTS)
             );
             Events.fire(Action.NOTIFY, statusMsg);
