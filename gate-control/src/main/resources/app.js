@@ -1,5 +1,5 @@
 
-var ws = new WebSocket("ws://" + window.location.host + "/ws/events/");
+var ws = new WebSocket("ws://stav.space:8080/ws/events/");
 
 ws.onopen = function() {
     update();
