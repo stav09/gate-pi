@@ -14,8 +14,16 @@ public class ActionServlet extends HttpServlet {
     protected void doGet( HttpServletRequest request, HttpServletResponse response ) 
             throws ServletException, IOException
     {
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
+        String[] uriParts = request.getRequestURI().split("/");
+        String action = uriParts[uriParts.length - 1];
+
+        try {
+            Events.fire(Action.valueOf(action), null);
+            response.setStatus(HttpServletResponse.SC_OK);
+            
+        } catch (IllegalArgumentException e) {            
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
 }

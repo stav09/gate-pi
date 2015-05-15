@@ -53,26 +53,34 @@ var update = function() {
     $('button').hide();    
 }
 
+var send = function(action) {
+    $.get("https://stav.space/action/" + action);
+}
+
+
 $(function() {
+    
     $('#button-open').click(function() {
-        ws.send("GATE_OPEN"); 
+        send("GATE_OPEN"); 
     });
     $('#button-close').click(function() {
-        ws.send("GATE_CLOSE"); 
+        send("GATE_CLOSE"); 
     });
     $('#button-lights-on').click(function() {
-    	ws.send("LIGHTS_ON");
+    	send("LIGHTS_ON");
     });
     $('#button-lights-off').click(function() {
-    	ws.send("LIGHTS_OFF");
+    	send("LIGHTS_OFF");
     });
     $('#button-hold').click(function() {
-    	ws.send("GATE_HOLD");
+    	send("GATE_HOLD");
     });
     $('#button-release').click(function() {
-    	ws.send("GATE_RELEASE");
+    	send("GATE_RELEASE");
     });
+    
     update();
+    send("STATUS_UPDATE");
 });
 
  

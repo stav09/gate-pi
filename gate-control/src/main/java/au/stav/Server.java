@@ -1,8 +1,7 @@
 package au.stav;
 
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -45,7 +44,7 @@ public class Server implements Runnable {
         String webDir = Server.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm(); 
         WebAppContext webappContext = new WebAppContext(webDir, "/");
         webappContext.setWelcomeFiles(new String[] { "index.html" });
-        webappContext.setVirtualHosts(new String[] { "@Secure" });
+        webappContext.setVirtualHosts(new String[] { "@Public" });
         
         
         // Action servlet (submit actions)
@@ -66,8 +65,11 @@ public class Server implements Runnable {
         websocketContext.setVirtualHosts(new String[] { "@Public" });
         
         
-        HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { websocketContext, webappContext });
+        HandlerCollection handlers = new HandlerCollection();
+        handlers.addHandler(actionContext);
+        handlers.addHandler(websocketContext);
+        handlers.addHandler(webappContext);
+        
         server.setHandler(handlers);
         
         try
