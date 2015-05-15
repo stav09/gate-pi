@@ -8,9 +8,9 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
 
-public class Socket extends WebSocketAdapter
+public class WebSocket extends WebSocketAdapter
 {
-    private Logger log = Log.getLogger(Socket.class);
+    private Logger log = Log.getLogger(WebSocket.class);
     
     @Override
     public void onWebSocketConnect(Session session)
@@ -28,13 +28,13 @@ public class Socket extends WebSocketAdapter
         super.onWebSocketText(message);
         log.debug("Received TEXT message: " + message);
         
-        String[] msgPart = message.split(":", 2);
-        try {
-            Events.fire(Action.valueOf(msgPart[0]), (msgPart.length > 1) ? msgPart[1] : null);
-            
-        } catch (IllegalArgumentException e) {
-            notifyClient("Invalid action: " + msgPart[0]);
-        }
+//        String[] msgPart = message.split(":", 2);
+//        try {
+//            Events.fire(Action.valueOf(msgPart[0]), (msgPart.length > 1) ? msgPart[1] : null);
+//            
+//        } catch (IllegalArgumentException e) {
+//            notifyClient("Invalid action: " + msgPart[0]);
+//        }
     }
     
     @Override

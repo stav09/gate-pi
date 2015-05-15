@@ -18,30 +18,56 @@ public class Server implements Runnable {
     public void run()
     {
         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
+
+        //HTTP
+        
+        ServerConnector publicConnector = new ServerConnector(server);
+        publicConnector.setPort(8080);
+        publicConnector.setName("Public");
+        server.addConnector(publicConnector);
+        
+        // HTTPS
+        
         SslContextFactory sslContextFactory = new SslContextFactory(KEYSTORE_LOCATION);
         sslContextFactory.setKeyStorePassword(KEYSTORE_PASSWORD);
         sslContextFactory.setTrustStorePath(TRUSTSTORE_LOCATION);
         sslContextFactory.setTrustStorePassword(TRUSTSTORE_PASSWORD);
         sslContextFactory.setNeedClientAuth(true);
- 
-        // create a https connector
-        ServerConnector connector = new ServerConnector(server, sslContextFactory);
-        connector.setPort(8443);
-        server.addConnector(connector);
         
-        // Static content 
+        ServerConnector secureConnector = new ServerConnector(server, sslContextFactory);
+        secureConnector.setPort(8443);
+        secureConnector.setName("Secure");
+        server.addConnector(secureConnector);
+
+        
+        // Static content
+        
         String webDir = Server.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm(); 
         WebAppContext webappContext = new WebAppContext(webDir, "/");
         webappContext.setWelcomeFiles(new String[] { "index.html" });
+        webappContext.setVirtualHosts(new String[] { "@Secure" });
         
-        // Websocket servlet
-        ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        contextHandler.setContextPath("/ws");
-        ServletHolder holderEvents = new ServletHolder("ws-events", Servlet.class);
-        contextHandler.addServlet(holderEvents, "/events/*");
+        
+        // Action servlet (submit actions)
+        
+        ServletContextHandler actionContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        actionContext.setContextPath("/action");
+        ServletHolder holderActions = new ServletHolder("http-action", ActionServlet.class);
+        actionContext.addServlet(holderActions, "/*");
+        actionContext.setVirtualHosts(new String[] { "@Secure" });
+        
+        
+        // Websocket servlet (listen for events)
+        
+        ServletContextHandler websocketContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        websocketContext.setContextPath("/ws");
+        ServletHolder holderEvents = new ServletHolder("ws-events", EventServlet.class);
+        websocketContext.addServlet(holderEvents, "/events/*");
+        websocketContext.setVirtualHosts(new String[] { "@Public" });
+        
         
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { contextHandler, webappContext });
+        handlers.setHandlers(new Handler[] { websocketContext, webappContext });
         server.setHandler(handlers);
         
         try
